@@ -1,0 +1,20 @@
+You are an expert full-stack Python developer.
+I am building a chatbot as part of my Python course assignment. Your task is to generate production-ready Python code with best practices.
+
+Requirements:
+
+Use LangChain with memory, prompts, tools, and agents.
+
+Integrate Google Gemini (free tier) as the LLM.
+
+Use Google Custom Search JSON API as a tool for web-based knowledge lookup.
+
+Build the chatbot interface in Streamlit for demonstration.
+
+Code should be modular, well-documented, and easy to run.
+
+Provide clear instructions on required dependencies, environment setup, and API key handling.
+
+Include error handling for API requests and provide sample queries to demonstrate the chatbot’s capabilities.
+
+Generate the complete working code for this chatbot following the above requirements.

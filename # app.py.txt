@@ -1,0 +1,72 @@
+# app.py
+
+import streamlit as st
+import google.generativeai as genai
+
+# --- SETUP AND API CONFIGURATION ---
+
+st.set_page_config(page_title="Gemini Chatbot")
+
+# Add a text input in the sidebar for the API key
+# Using st.secrets for deployment is the best practice, but this is for the exercise
+
+api_key = st.sidebar.text_input("Enter your Google Gemini API Key:", type="password")
+
+if api_key:
+    # Configure the Gemini API with the provided key
+    genai.configure(api_key=api_key)
+    # Initialize the Generative Model
+    model = genai.GenerativeModel('gemini-2.5-flash')
+else:
+    st.sidebar.warning("Please enter your API Key to begin.")
+    st.stop() # Stop the app from running further if no key is provided
+
+
+# --- CHAT INITIALIZATION ---
+
+# Initialize chat history in session state if it doesn't exist
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+
+# --- UI AND CHAT DISPLAY ---
+
+st.title(" My Gemini Chatbot")
+st.write("This is a simple chatbot powered by Google's Gemini Pro model.")
+
+# Display existing chat messages from history
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+
+# --- USER INPUT AND MODEL RESPONSE ---
+
+# The st.chat_input widget waits for the user to enter a prompt
+if prompt := st.chat_input("What is up?"):
+    
+    # 1. Add user's message to the chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    
+    # 2. Display the user's message in the chat message container
+    with st.chat_message("user"):
+        st.markdown(prompt)
+        
+    # 3. Get the model's response
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        full_response = ""
+        try:
+            # Send the prompt to the model
+            response = model.generate_content(prompt)
+            # Extract the text from the response
+            full_response = response.text
+            message_placeholder.markdown(full_response)
+        except Exception as e:
+            # Handle potential errors (e.g., API key issue, content filtering)
+            st.error(f"An error occurred: {e}")
+            full_response = "Sorry, I encountered an error."
+            message_placeholder.markdown(full_response)
+
+    # 4. Add the model's response to the chat history
+    st.session_state.messages.append({"role": "assistant", "content": full_response})

@@ -1,0 +1,8 @@
+LLMs - Pretrained models
+lamDA 3.2 Seven billion parmeter - on google colab
+collect labeled data 
+train the model
+
+fine tuning is domain specific model
+
+embedding models? generates numerical representations of the data.
